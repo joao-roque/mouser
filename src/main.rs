@@ -26,10 +26,17 @@ fn move_mouse_to(mouse: &mut Mouse, x: u64, y: u64) {
 
 // This method clicks with a given mouse object
 fn click_with_mouse(mouse: &mut Mouse) {
-    mouse.click(&Keys::RIGHT);
+    match mouse.click(&Keys::RIGHT) {
+        Ok(v) => v,
+        Err(_) => {
+            eprintln!("Failed to click with the mouse.");
+            std::process::exit(1);
+        }
+    };
 }
 
 
+// This method sleeps for a random amount of time between two given values
 fn sleep_mf(low: u64, high: u64) {
     let sleep_value: u64 = rand::thread_rng().gen_range(low..high);
     let sleep_secs = time::Duration::from_secs(sleep_value);
@@ -44,7 +51,6 @@ fn main() {
     loop {
 
         let number_of_clicks: i64 = rand::thread_rng().gen_range(2..15);
-        
         for _ in 0..number_of_clicks {
             let x_number: u64 = rand::thread_rng().gen_range(LOWER_X_BOUND..UPPER_X_BOUND);
             let y_number: u64 = rand::thread_rng().gen_range(LOWER_Y_BOUND..UPPER_Y_BOUND);
